@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cepkaynak — Dükkân</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#E8B44A;
+  --gold-2:#F7DE9B;
+  --gold-3:#A9761E;
+  --violet:#7B4FD6;
+  --violet-2:#9B6EF0;
+  --violet-deep:#2A1440;
+  --ink:#150A21;
+  --text:#EFE4F6;
+  --text-dim:#B9A5CC;
+  --glass:rgba(58,28,88,.42);
+  --glass-2:rgba(72,36,108,.34);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+body{
+  background:#0B0512;
+  font-family:'Inter',sans-serif;
+  display:flex;justify-content:center;
+  min-height:100vh;
+}
+.phone{
+  width:393px;min-height:852px;position:relative;overflow:hidden;
+  color:var(--text);
+  background:
+    radial-gradient(120% 60% at 50% 100%, rgba(255,190,120,.14) 0%, transparent 60%),
+    radial-gradient(90% 40% at 8% 42%, rgba(180,130,255,.20) 0%, transparent 62%),
+    radial-gradient(90% 40% at 95% 38%, rgba(180,130,255,.18) 0%, transparent 62%),
+    linear-gradient(180deg,#2E1748 0%,#3A1D58 32%,#4A2668 58%,#3B1D57 78%,#241036 100%);
+}
+/* sisli katman + uzak şehir silüeti */
+.phone::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(60% 22% at 20% 55%, rgba(255,255,255,.09), transparent 70%),
+    radial-gradient(55% 20% at 82% 48%, rgba(255,255,255,.07), transparent 70%),
+    radial-gradient(70% 25% at 50% 88%, rgba(255,210,140,.10), transparent 70%);
+  mix-blend-mode:screen;
+}
+.phone::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:46%;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,205,140,.055) 0 3px, transparent 3px 9px),
+    repeating-linear-gradient(90deg, rgba(255,205,140,.04) 0 2px, transparent 2px 14px);
+  -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,.85) 0%, transparent 26%, transparent 74%, rgba(0,0,0,.85) 100%);
+          mask-image:linear-gradient(90deg, rgba(0,0,0,.85) 0%, transparent 26%, transparent 74%, rgba(0,0,0,.85) 100%);
+  opacity:.6;
+}
+.scroll{position:relative;z-index:2;padding:10px 14px 96px;display:flex;flex-direction:column;gap:12px;}
+
+/* ---------- ortak altın çerçeve ---------- */
+.gframe{
+  position:relative;
+  background:linear-gradient(160deg,var(--glass),var(--glass-2));
+  border:1px solid rgba(232,180,74,.55);
+  box-shadow:
+    0 0 0 1px rgba(255,225,160,.10) inset,
+    0 0 14px rgba(232,180,74,.18),
+    0 0 34px rgba(150,90,255,.12),
+    0 10px 26px rgba(0,0,0,.32);
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+}
+.gframe.soft{border-color:rgba(232,180,74,.34);box-shadow:0 0 10px rgba(232,180,74,.10),0 8px 20px rgba(0,0,0,.28);}
+
+/* ---------- 1. üst profil çubuğu ---------- */
+.topbar{
+  border-radius:34px;padding:9px 10px;
+  display:flex;align-items:center;gap:10px;
+}
+.avatar-ring{
+  width:62px;height:62px;border-radius:50%;flex:0 0 auto;
+  background:conic-gradient(from 210deg,var(--gold-3),var(--gold-2),var(--gold),var(--gold-3));
+  padding:3px;box-shadow:0 0 16px rgba(232,180,74,.45);
+  display:grid;place-items:center;
+}
+.avatar-in{
+  width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,#5A2E86,#2A1140 70%);
+  display:grid;place-items:center;
+  font-family:'Cinzel',serif;font-weight:700;font-size:22px;color:var(--gold-2);
+  box-shadow:inset 0 2px 10px rgba(0,0,0,.6);
+}
+.shield{
+  width:30px;height:36px;flex:0 0 auto;
+  background:linear-gradient(180deg,#5B2E8C,#33174F);
+  border:1.5px solid var(--gold);
+  clip-path:polygon(50% 0,100% 16%,100% 62%,50% 100%,0 62%,0 16%);
+  display:grid;place-items:center;
+  font-size:12px;font-weight:800;color:var(--gold-2);
+  box-shadow:0 0 10px rgba(232,180,74,.35);
+}
+.xp{flex:1;min-width:0;}
+.xp-track{
+  height:11px;border-radius:8px;background:rgba(20,8,34,.72);
+  border:1px solid rgba(232,180,74,.5);overflow:hidden;
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.6);
+}
+.xp-fill{
+  height:100%;width:46%;border-radius:8px;
+  background:linear-gradient(90deg,#6C3FC4,var(--violet-2));
+  box-shadow:0 0 10px rgba(155,110,240,.75);
+}
+.xp-txt{font-size:9.5px;color:var(--text-dim);letter-spacing:.08em;margin-top:4px;font-family:'JetBrains Mono',monospace;}
+.balance{
+  border-radius:22px;padding:10px 14px;flex:0 0 auto;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:var(--gold-2);
+  text-shadow:0 0 10px rgba(232,180,74,.4);
+}
+.bell{
+  width:52px;height:52px;border-radius:50%;flex:0 0 auto;
+  background:conic-gradient(from 210deg,var(--gold-3),var(--gold-2),var(--gold),var(--gold-3));
+  padding:2.5px;box-shadow:0 0 14px rgba(232,180,74,.42);
+}
+.bell-in{
+  width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,#4B2472,#25103A 70%);
+  display:grid;place-items:center;font-size:20px;
+}
+
+/* ---------- 2. istatistik şeridi ---------- */
+.stats{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.stats::-webkit-scrollbar{display:none;}
+.stat{
+  border-radius:14px;padding:9px 11px;min-width:112px;flex:0 0 auto;
+  display:flex;align-items:center;gap:8px;
+}
+.stat .ic{
+  width:22px;height:22px;flex:0 0 auto;display:grid;place-items:center;
+  filter:drop-shadow(0 0 5px rgba(232,180,74,.6));
+}
+.stat .k{font-size:8.5px;letter-spacing:.14em;color:var(--text-dim);text-transform:uppercase;}
+.stat .v{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--gold-2);margin-top:1px;}
+
+/* ---------- 3. arama / satır ---------- */
+.rowpill{
+  border-radius:40px;padding:10px 14px 10px 10px;
+  display:flex;align-items:center;gap:12px;
+}
+.orb{
+  width:54px;height:54px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(circle at 33% 26%,#7A46C6,#2B1142 72%);
+  border:1.5px solid rgba(232,180,74,.55);
+  box-shadow:0 0 16px rgba(140,80,240,.5),inset 0 3px 12px rgba(0,0,0,.55);
+  display:grid;place-items:center;font-size:22px;
+}
+.rowpill .body{flex:1;min-width:0;}
+.rowpill .t{font-size:14px;font-weight:700;}
+.rowpill .s{font-size:11px;color:var(--text-dim);margin-top:2px;}
+.chev{font-size:20px;color:var(--gold);flex:0 0 auto;padding-right:4px;}
+
+/* ---------- 4. tezgâh: ikiye bölünmüş müşteri + ürün ---------- */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:9px;align-items:stretch;}
+.pcard{border-radius:18px;padding:11px;display:flex;flex-direction:column;gap:7px;}
+.pcard .ptop{display:flex;align-items:center;gap:8px;}
+.p-orb{
+  width:38px;height:38px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(circle at 34% 26%,#5A2E86,#220F36 72%);
+  border:1.5px solid rgba(232,180,74,.6);
+  box-shadow:0 0 10px rgba(232,180,74,.3),inset 0 2px 8px rgba(0,0,0,.6);
+  display:grid;place-items:center;
+  font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold-2);
+}
+/* bilezik: CSS ile çizilmiş altın halka, emoji değil */
+.ring-ic{
+  width:38px;height:38px;border-radius:50%;flex:0 0 auto;
+  border:5px solid var(--gold);
+  box-shadow:0 0 12px rgba(232,180,74,.55),inset 0 0 6px rgba(0,0,0,.5);
+  background:transparent;
+}
+.pcard .pname{font-size:13.5px;font-weight:800;line-height:1.2;}
+.pcard .pquote{
+  font-size:11.5px;color:var(--text-dim);line-height:1.4;font-style:italic;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;}
+.ptag{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;
+  padding:3px 7px;border-radius:8px;color:var(--gold-2);
+  background:rgba(232,180,74,.12);border:1px solid rgba(232,180,74,.4);
+}
+.pnote{font-size:9.5px;color:var(--text-dim);font-style:italic;}
+.mood{
+  height:5px;border-radius:4px;margin-top:auto;
+  background:rgba(20,8,34,.7);border:1px solid rgba(232,180,74,.35);overflow:hidden;
+}
+.mood i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--gold-3),var(--gold-2));box-shadow:0 0 8px rgba(232,180,74,.7);}
+
+/* terazi şeridi */
+.scalebar{
+  border-radius:16px;padding:11px 13px;
+  background:linear-gradient(160deg,rgba(14,6,24,.85),rgba(24,10,40,.8));
+}
+.scalebar .sb-head{display:flex;align-items:center;justify-content:space-between;}
+.sb-cap{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;color:var(--gold);}
+.test-btn{
+  padding:6px 16px;border-radius:14px;font-size:11.5px;font-weight:800;color:#2A1608;
+  background:linear-gradient(180deg,var(--gold-2),var(--gold));
+  box-shadow:0 0 14px rgba(232,180,74,.5);
+}
+.sb-row{display:flex;gap:10px;margin-top:9px;}
+.sb-cell{flex:1;}
+.sb-k{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.12em;color:var(--text-dim);}
+.sb-v{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--gold-2);margin-top:2px;text-shadow:0 0 10px rgba(232,180,74,.4);}
+.sb-div{width:1px;background:rgba(232,180,74,.25);}
+
+/* ---------- 6. sekme çubuğu ---------- */
+.tabs{
+  border-radius:26px;padding:7px 8px;
+  display:flex;align-items:center;gap:4px;
+}
+.tab{
+  flex:1;text-align:center;padding:9px 4px;border-radius:18px;
+  font-size:11.5px;font-weight:600;color:var(--text-dim);position:relative;
+}
+.tab + .tab::before{
+  content:"";position:absolute;left:-2px;top:22%;height:56%;width:1px;background:rgba(232,180,74,.3);
+}
+.tab.on{
+  background:linear-gradient(180deg,#8A57E0,#6435B8);
+  color:#fff;font-weight:800;border:none;
+  box-shadow:0 0 16px rgba(150,90,240,.55),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.tab.on::before{display:none;}
+
+/* ---------- 7. slider paneli ---------- */
+.panel{border-radius:20px;padding:14px 14px 15px;}
+.panel .cap{font-size:11px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;text-align:center;}
+.panel .val{
+  text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;
+  font-size:22px;color:var(--gold-2);margin-top:4px;text-shadow:0 0 12px rgba(232,180,74,.45);
+}
+input[type=range]{
+  -webkit-appearance:none;width:100%;height:6px;border-radius:6px;margin:14px 0 4px;
+  background:linear-gradient(90deg,var(--violet) 0%,var(--violet-2) 42%,rgba(255,255,255,.18) 42%,rgba(255,255,255,.18) 100%);
+  box-shadow:0 0 10px rgba(140,80,240,.35);
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,#FFF6E2,#E4C79B 70%);
+  border:2px solid rgba(255,255,255,.65);
+  box-shadow:0 0 14px rgba(255,235,190,.85),0 2px 6px rgba(0,0,0,.5);
+}
+.chips{display:flex;gap:8px;margin-top:12px;align-items:center;}
+.chip{
+  flex:1;text-align:center;padding:10px 4px;border-radius:16px;
+  border:1px solid rgba(232,180,74,.45);color:var(--text);
+  font-size:11.5px;font-weight:600;background:rgba(45,20,72,.35);
+}
+.chip.sel{
+  background:linear-gradient(180deg,#8A57E0,#6435B8);border-color:transparent;color:#fff;font-weight:800;
+  box-shadow:0 0 16px rgba(150,90,240,.5),inset 0 1px 0 rgba(255,255,255,.25);
+}
+/* süslü altın ana buton */
+.ornate{
+  flex:1.5;position:relative;padding:11px 8px;border-radius:22px;
+  background:linear-gradient(180deg,rgba(120,70,190,.75),rgba(70,34,120,.75));
+  border:2px solid var(--gold);
+  box-shadow:0 0 18px rgba(232,180,74,.5),inset 0 0 14px rgba(232,180,74,.18);
+  text-align:center;font-size:12.5px;font-weight:800;color:#fff;letter-spacing:.03em;
+}
+.ornate::before,.ornate::after{
+  content:"✦";position:absolute;top:50%;transform:translateY(-50%);
+  color:var(--gold-2);font-size:13px;text-shadow:0 0 8px rgba(232,180,74,.9);
+}
+.ornate::before{left:-3px;}
+.ornate::after{right:-3px;}
+
+/* ---------- 8. 3'lü kart ızgarası ---------- */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.gcard{
+  border-radius:16px;aspect-ratio:.72;padding:11px 9px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;
+}
+.gcard .gi{font-size:28px;filter:drop-shadow(0 0 8px rgba(232,180,74,.55));}
+.gcard .gt{font-size:11.5px;font-weight:700;line-height:1.25;}
+.gcard .gs{font-size:9.5px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;}
+.gcard.locked{opacity:.55;}
+
+/* ---------- 9. alt navigasyon ---------- */
+.bottomnav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:0;
+  width:393px;padding:10px 16px 22px;z-index:5;
+  background:linear-gradient(180deg,rgba(28,12,46,.2),rgba(18,7,30,.92) 46%);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.navbar{
+  border-radius:30px;padding:8px 14px;height:62px;
+  display:flex;align-items:center;justify-content:space-between;position:relative;
+}
+.nav-i{
+  display:flex;flex-direction:column;align-items:center;gap:3px;width:56px;
+  font-size:9.5px;color:var(--text-dim);letter-spacing:.02em;
+}
+.nav-i .ni{font-size:19px;opacity:.85;}
+.nav-i.on{color:var(--gold-2);}
+.nav-i.on .ni{opacity:1;filter:drop-shadow(0 0 7px rgba(232,180,74,.75));}
+.nav-center{
+  position:absolute;left:50%;top:-16px;transform:translateX(-50%);
+  width:66px;height:66px;border-radius:50%;
+  background:conic-gradient(from 210deg,var(--gold-3),var(--gold-2),var(--gold),var(--gold-3));
+  padding:3.5px;box-shadow:0 0 22px rgba(232,180,74,.6),0 8px 20px rgba(0,0,0,.5);
+}
+.nav-center-in{
+  width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 34% 26%,#7C45CC,#2C1145 72%);
+  display:grid;place-items:center;font-size:25px;
+  box-shadow:inset 0 3px 14px rgba(0,0,0,.6);
+}
+.spacer{width:66px;}
+.sectitle{
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.24em;color:var(--gold);
+  padding-left:4px;margin-top:2px;text-shadow:0 0 10px rgba(232,180,74,.35);
+}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="scroll">
+
+    <!-- 1 · üst profil -->
+    <div class="gframe topbar">
+      <div class="avatar-ring"><div class="avatar-in">O</div></div>
+      <div class="shield">3</div>
+      <div class="xp">
+        <div class="xp-track"><div class="xp-fill"></div></div>
+        <div class="xp-txt">SEVİYE 3 · 4.620 XP</div>
+      </div>
+      <div class="gframe soft balance">62.707₺</div>
+      <div class="bell"><div class="bell-in">🔔</div></div>
+    </div>
+
+    <!-- 2 · istatistik şeridi -->
+    <div class="stats">
+      <div class="gframe soft stat"><div class="ic">💛</div><div><div class="k">Karizma</div><div class="v">48/100</div></div></div>
+      <div class="gframe soft stat"><div class="ic">🤝</div><div><div class="k">Toptancı</div><div class="v">55/100</div></div></div>
+      <div class="gframe soft stat"><div class="ic">📈</div><div><div class="k">Piyasa</div><div class="v">4.657₺</div></div></div>
+      <div class="gframe soft stat"><div class="ic">📦</div><div><div class="k">Stok</div><div class="v">0₺</div></div></div>
+      <div class="gframe soft stat"><div class="ic">🏛</div><div><div class="k">Servet</div><div class="v">62.707₺</div></div></div>
+    </div>
+
+    <!-- 3 · tezgâh durumu -->
+    <div class="gframe rowpill">
+      <div class="orb">⚖️</div>
+      <div class="body">
+        <div class="t">Tezgâh Dolu</div>
+        <div class="s">Bekleyen müşteri: 0 · Sıradaki 2 dk</div>
+      </div>
+      <div class="chev">›</div>
+    </div>
+
+    <div class="sectitle">TEZGÂH</div>
+
+    <!-- 4 · müşteri | ürün (ikiye bölünmüş) -->
+    <div class="pair">
+      <div class="gframe pcard">
+        <div class="ptop">
+          <div class="p-orb">M</div>
+          <div class="pname">Mehmet Bey</div>
+        </div>
+        <div class="pquote">“İşlemeli bilezik bozdurmak istiyorum, 22 ayar diyorum.”</div>
+        <div class="ptags"><span class="ptag">NORMAL</span><span class="ptag">KOLAY İKNA</span></div>
+        <div class="mood"><i></i></div>
+      </div>
+
+      <div class="gframe pcard">
+        <div class="ptop">
+          <div class="ring-ic"></div>
+          <div class="pname">İşlemeli Bilezik</div>
+        </div>
+        <div class="ptags"><span class="ptag">22 AYAR</span><span class="ptag">28,1 g</span></div>
+        <div class="pnote">Ayar beyana dayalı — test et</div>
+        <div class="mood"><i style="width:38%"></i></div>
+      </div>
+    </div>
+
+    <!-- 5 · hassas terazi şeridi -->
+    <div class="gframe scalebar">
+      <div class="sb-head">
+        <div class="sb-cap">HASSAS TERAZİ</div>
+        <div class="test-btn">TEST</div>
+      </div>
+      <div class="sb-row">
+        <div class="sb-cell"><div class="sb-k">GRAM</div><div class="sb-v">0.00 g</div></div>
+        <div class="sb-div"></div>
+        <div class="sb-cell"><div class="sb-k">AYAR</div><div class="sb-v">--</div></div>
+        <div class="sb-div"></div>
+        <div class="sb-cell"><div class="sb-k">TEMİZLİK</div><div class="sb-v">--</div></div>
+      </div>
+    </div>
+
+    <!-- 6 · sekmeler -->
+    <div class="gframe tabs">
+      <div class="tab">Tart</div>
+      <div class="tab">Mıknatıs</div>
+      <div class="tab">Ayar</div>
+      <div class="tab on">XRF</div>
+    </div>
+
+    <!-- 7 · teklif paneli -->
+    <div class="gframe panel">
+      <div class="cap">Teklifin</div>
+      <div class="val" id="offer">13.500₺</div>
+      <input type="range" min="11000" max="14820" value="13500" step="10" id="sld">
+      <div class="chips">
+        <div class="chip">Sert</div>
+        <div class="chip sel">Dengeli</div>
+        <div class="chip">Hızlı</div>
+        <div class="ornate">TEKLİFİ GÖNDER</div>
+      </div>
+    </div>
+
+    <!-- 8 · yetenek kartları -->
+    <div class="grid3">
+      <div class="gframe soft gcard"><div class="gi">🧠</div><div class="gt">Uzman Görüşü</div><div class="gs">Sv. 2</div></div>
+      <div class="gframe soft gcard"><div class="gi">🤝</div><div class="gt">Sıkı Pazarlıkçı</div><div class="gs">Sv. 1</div></div>
+      <div class="gframe soft gcard locked"><div class="gi">🔒</div><div class="gt">Ölücü</div><div class="gs">Sv. 5'te</div></div>
+    </div>
+
+  </div>
+
+  <!-- 9 · alt navigasyon -->
+  <div class="bottomnav">
+    <div class="gframe navbar">
+      <div class="nav-i on"><div class="ni">🏪</div>Dükkân</div>
+      <div class="nav-i"><div class="ni">🔎</div>Piyasa</div>
+      <div class="spacer"></div>
+      <div class="nav-i"><div class="ni">🎖</div>Yetenek</div>
+      <div class="nav-i"><div class="ni">👤</div>Profil</div>
+      <div class="nav-center"><div class="nav-center-in">💰</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const s=document.getElementById('sld'),o=document.getElementById('offer');
+  const paint=()=>{
+    const p=(s.value-s.min)/(s.max-s.min)*100;
+    s.style.background=`linear-gradient(90deg,#7B4FD6 0%,#9B6EF0 ${p}%,rgba(255,255,255,.18) ${p}%,rgba(255,255,255,.18) 100%)`;
+    o.textContent=Number(s.value).toLocaleString('tr-TR')+'₺';
+  };
+  s.addEventListener('input',paint);paint();
+</script>
+</body>
+</html>
