@@ -1,17 +1,19 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { CapitalState, GoldPriceState } from '../types/game';
-import { colors, fonts, fontSizes, radius } from '../theme';
+import { fonts, fontSizes, radius } from '../theme';
+import { glass } from '../theme/glass';
 import { formatGram, formatPercent, formatTl } from '../utils/format';
-import { Card } from './Card';
-import { ReputationGauge } from './ReputationGauge';
+import { GlassCard } from './GlassCard';
 
 // Bölüm 2: Sermaye Gösterimi + Nakit/Stok/Borç Ayrımı.
-// Ayrıca Toptancı Güveni: borcunu vadesinde ödemezsen düşer, düşerse
-// toptancı artık kredi (borçla tamamlama) vermez.
+// [DÜZELTME] Krem/kağıt kart yerine premium mor+altın cam dil (GlassCard) —
+// Dükkân'daki tek görsel dile katıldı. Toptancı Güveni göstergesi buradan
+// KALDIRILDI: aynı değer zaten üst HUD'da (Karizma'nın yanında) belirgin
+// bir kartla gösteriliyor — burada tekrarı sadece dikey yer kaplıyordu,
+// hiçbir bilgi kaybı yok.
 export function CapitalSummary({
   capital,
   goldPrice,
-  wholesalerTrust,
   loanDueDay,
   currentDay,
   onRepayDebt,
@@ -32,13 +34,13 @@ export function CapitalSummary({
   const canRepay = capital.debtTl > 0 && capital.cashTl > 0;
 
   return (
-    <Card>
+    <GlassCard style={styles.card}>
       <Text style={styles.label}>SERMAYEN</Text>
       <View style={styles.headlineRow}>
         <Text style={styles.headline}>{formatGram(cashInGrams)} altın</Text>
         <Text style={styles.headlineApprox}>≈ {formatTl(capital.cashTl)}</Text>
       </View>
-      <Text style={[styles.change, { color: isUp ? colors.positive : colors.negative }]}>
+      <Text style={[styles.change, { color: isUp ? glass.positive : glass.negative }]}>
         {formatPercent(goldPrice.dailyChangePercent)} (bugün)
       </Text>
 
@@ -46,7 +48,7 @@ export function CapitalSummary({
 
       <Row label="Nakit (Kasa)" value={formatTl(capital.cashTl)} />
       <Row label="Stok değeri (has altın karşılığı)" value={formatTl(capital.stockValueTl)} />
-      <Row label="Borç" value={formatTl(capital.debtTl)} valueColor={colors.negative} />
+      <Row label="Borç" value={formatTl(capital.debtTl)} valueColor={glass.negative} />
 
       {capital.debtTl > 0 && (
         <View style={styles.debtActionRow}>
@@ -63,14 +65,10 @@ export function CapitalSummary({
         </View>
       )}
 
-      <View style={styles.trustRow}>
-        <ReputationGauge score={wholesalerTrust} label="TOPTANCI GÜVENİ" align="flex-start" />
-      </View>
-
       <View style={styles.divider} />
       <Row label="Net Servet" value={formatTl(netWorth)} bold />
       <Text style={styles.netWorthGrams}>≈ {formatGram(netWorthInGrams)} altın karşılığı</Text>
-    </Card>
+    </GlassCard>
   );
 }
 
@@ -102,10 +100,13 @@ function Row({
 }
 
 const styles = StyleSheet.create({
+  card: {
+    padding: 12,
+  },
   label: {
     fontFamily: fonts.bodyMedium,
     fontSize: fontSizes.xs,
-    color: colors.inkMuted,
+    color: glass.inkMuted,
     letterSpacing: 1,
   },
   headlineRow: {
@@ -113,71 +114,71 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 4,
+    marginTop: 3,
   },
   headline: {
     fontFamily: fonts.headingBold,
-    fontSize: fontSizes.xl,
-    color: colors.ink,
+    fontSize: fontSizes.lg,
+    color: glass.ink,
   },
   headlineApprox: {
     fontFamily: fonts.mono,
-    fontSize: fontSizes.md,
-    color: colors.inkMuted,
+    fontSize: fontSizes.sm,
+    color: glass.inkMuted,
   },
   change: {
     fontFamily: fonts.monoBold,
-    fontSize: fontSizes.sm,
-    marginTop: 2,
+    fontSize: fontSizes.xs,
+    marginTop: 1,
   },
   divider: {
     height: 1,
-    backgroundColor: colors.border,
-    marginVertical: 10,
+    backgroundColor: glass.borderSoft,
+    marginVertical: 7,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 3,
+    paddingVertical: 2,
   },
   rowLabel: {
     fontFamily: fonts.body,
-    fontSize: fontSizes.sm,
-    color: colors.inkMuted,
+    fontSize: fontSizes.xs,
+    color: glass.inkMuted,
   },
   rowLabelBold: {
     fontFamily: fonts.bodyBold,
-    color: colors.ink,
+    color: glass.ink,
   },
   rowValue: {
     fontFamily: fonts.mono,
-    fontSize: fontSizes.sm,
-    color: colors.ink,
+    fontSize: fontSizes.xs,
+    color: glass.ink,
   },
   rowValueBold: {
     fontFamily: fonts.monoBold,
-    fontSize: fontSizes.md,
+    fontSize: fontSizes.sm,
   },
   netWorthGrams: {
     fontFamily: fonts.mono,
-    fontSize: fontSizes.xs,
-    color: colors.inkMuted,
+    fontSize: 10,
+    color: glass.inkMuted,
     textAlign: 'right',
-    marginTop: 2,
+    marginTop: 1,
   },
   debtActionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 4,
+    marginTop: 3,
   },
   dueLabel: {
     fontFamily: fonts.body,
     fontSize: fontSizes.xs,
-    color: colors.inkMuted,
+    color: glass.inkMuted,
   },
   repayButton: {
-    backgroundColor: colors.ink,
+    backgroundColor: glass.gold,
     borderRadius: radius.sm,
     paddingVertical: 4,
     paddingHorizontal: 10,
@@ -185,9 +186,6 @@ const styles = StyleSheet.create({
   repayButtonLabel: {
     fontFamily: fonts.bodyBold,
     fontSize: 11,
-    color: colors.white,
-  },
-  trustRow: {
-    marginTop: 10,
+    color: '#3A2A00',
   },
 });
