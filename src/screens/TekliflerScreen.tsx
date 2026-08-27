@@ -1,0 +1,160 @@
+import { useNavigation } from '@react-navigation/native';
+import { useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FilterTabs, type FilterOption } from '../components/FilterTabs';
+import { OfferCard } from '../components/OfferCard';
+import { MINUTES_PER_DAY, useGameStore } from '../store/useGameStore';
+import { colors, fonts, fontSizes } from '../theme';
+import type { OfferStatus } from '../types/offer';
+
+type FilterValue = 'tumu' | OfferStatus;
+
+const FILTER_OPTIONS: FilterOption<FilterValue>[] = [
+  { label: 'Tümü', value: 'tumu' },
+  { label: 'Bekleyen', value: 'bekleyen' },
+  { label: 'Kabul', value: 'kabul' },
+  { label: 'Red', value: 'red' },
+];
+
+function formatRemaining(remainingMinutes: number): string {
+  const clamped = Math.max(0, Math.ceil(remainingMinutes));
+  const hours = Math.floor(clamped / 60);
+  const minutes = clamped % 60;
+  if (hours <= 0) return `${minutes} dk içinde yanıt verecek`;
+  return `${hours} sa ${minutes} dk içinde yanıt verecek`;
+}
+
+// Bölüm 4.6 (v2): Müşteriler — artık anında sonuçlanan (kabul/red)
+// pazarlıkların GEÇMİŞİ (bkz. NegotiationPanel'deki logCompletedOffer).
+// "Bekleyen" durumu/filtresi geriye dönük uyumluluk için duruyor ama yeni
+// akışta neredeyse hiç oluşmuyor — sonuç artık pazarlık ekranında anında belli.
+export function TekliflerScreen() {
+  const navigation = useNavigation();
+  const offers = useGameStore((s) => s.offers);
+  const day = useGameStore((s) => s.day);
+  const minuteOfDay = useGameStore((s) => s.minuteOfDay);
+  const [filter, setFilter] = useState<FilterValue>('tumu');
+
+  const currentTotalMinutes = day * MINUTES_PER_DAY + minuteOfDay;
+
+  const pendingCount = useMemo(
+    () => offers.filter((offer) => offer.status === 'bekleyen').length,
+    [offers],
+  );
+
+  const filtered = useMemo(
+    () => (filter === 'tumu' ? offers : offers.filter((offer) => offer.status === filter)),
+    [offers, filter],
+  );
+
+  return (
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Müşteriler</Text>
+          <View style={styles.headerRight}>
+            {pendingCount > 0 && (
+              <View style={styles.pendingBadge}>
+                <Text style={styles.pendingBadgeLabel}>{pendingCount} bekleyen</Text>
+              </View>
+            )}
+            <Pressable onPress={() => navigation.goBack()} hitSlop={10} style={styles.closeButton}>
+              <Text style={styles.closeButtonLabel}>✕</Text>
+            </Pressable>
+          </View>
+        </View>
+
+        <FilterTabs options={FILTER_OPTIONS} value={filter} onChange={setFilter} />
+
+        {filtered.length === 0 ? (
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>
+              {filter === 'tumu'
+                ? 'Henüz yeni müşteri yok. Yeni müşteriler birazdan gelecek — burada tamamladığın pazarlıkların geçmişini göreceksin.'
+                : 'Bu durumda kayıt yok.'}
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.list}>
+            {filtered.map((offer) => (
+              <OfferCard
+                key={offer.id}
+                offer={offer}
+                remainingLabel={
+                  offer.status === 'bekleyen'
+                    ? formatRemaining(offer.resolvesAtTotalMinutes - currentTotalMinutes)
+                    : undefined
+                }
+              />
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  content: {
+    padding: 16,
+    gap: 14,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    fontFamily: fonts.headingBold,
+    fontSize: fontSizes.xl,
+    color: colors.inkOnDark,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  pendingBadge: {
+    backgroundColor: colors.accentSoft,
+    borderRadius: 999,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+  },
+  pendingBadgeLabel: {
+    fontFamily: fonts.bodyBold,
+    fontSize: fontSizes.xs,
+    color: colors.accentDark,
+  },
+  closeButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: colors.surfaceSunken,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButtonLabel: {
+    fontFamily: fonts.bodyBold,
+    fontSize: fontSizes.sm,
+    color: colors.inkMuted,
+  },
+  list: {
+    gap: 10,
+  },
+  empty: {
+    paddingVertical: 40,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontFamily: fonts.body,
+    fontSize: fontSizes.sm,
+    color: colors.inkMutedOnDark,
+    textAlign: 'center',
+    maxWidth: 260,
+  },
+});

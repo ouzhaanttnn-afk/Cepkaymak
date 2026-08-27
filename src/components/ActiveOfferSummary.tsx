@@ -1,0 +1,85 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors, fonts, fontSizes } from '../theme';
+import { formatTl } from '../utils/format';
+import { Card } from './Card';
+import { AvatarInitial } from './icons/AvatarInitial';
+
+export interface ActiveOffer {
+  customerName: string;
+  productName: string;
+  offerAmountTl: number;
+  status: string;
+}
+
+// Bölüm 4.1: aktif teklif özeti. "Devam Et" Pazarlık Ekranı'nı açar.
+export function ActiveOfferSummary({
+  offer,
+  onContinue,
+}: {
+  offer: ActiveOffer;
+  onContinue: () => void;
+}) {
+  return (
+    <Card style={styles.card}>
+      <AvatarInitial name={offer.customerName} />
+      <View style={styles.info}>
+        <Text style={styles.customer}>
+          {offer.customerName} <Text style={styles.status}>· {offer.status}</Text>
+        </Text>
+        <Text style={styles.product}>{offer.productName}</Text>
+      </View>
+      <View style={styles.amountBlock}>
+        <Text style={styles.amount}>{formatTl(offer.offerAmountTl)}</Text>
+        <Pressable style={styles.button} onPress={onContinue}>
+          <Text style={styles.buttonLabel}>Devam Et</Text>
+        </Pressable>
+      </View>
+    </Card>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  info: {
+    flex: 1,
+  },
+  customer: {
+    fontFamily: fonts.bodyBold,
+    fontSize: fontSizes.sm,
+    color: colors.ink,
+  },
+  status: {
+    fontFamily: fonts.bodyMedium,
+    color: colors.inkMuted,
+  },
+  product: {
+    fontFamily: fonts.body,
+    fontSize: fontSizes.xs,
+    color: colors.inkMuted,
+    marginTop: 1,
+  },
+  amountBlock: {
+    alignItems: 'flex-end',
+    gap: 4,
+  },
+  amount: {
+    fontFamily: fonts.monoBold,
+    fontSize: fontSizes.md,
+    color: colors.ink,
+  },
+  button: {
+    backgroundColor: colors.accent,
+    borderRadius: 8,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+  },
+  buttonLabel: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: 11,
+    color: colors.white,
+  },
+});
